@@ -89,7 +89,110 @@ public static void WriteTable(ArrayList<SportComands> arr, Connection connection
 ## Выполнение заданий
 ### *Задание 1*
 #### Постройте график по среднему возрасту во всех командах
-Для начала выполним запрос к базе данны
+Для начала выполним запрос к базе данных
+![Задание 1](https://github.com/korm445/java-project/assets/152654984/dd84aba1-690b-410d-b2cf-defef57269ff)
+
+После напишем в классе SQL пишем два похожих метода, которые обрабатывают этот запрос
+
+Первый метод возвращает массив названий команд 
+```
+/*Метод точно такой же как и AvgHeight, только из этого метода извлекается столбец с
+    именами команд, для того чтобы в будущем разместить их по Оси Х */
+    public static List<String> ComandAvgHeight(Connection conn) throws java.sql.SQLException {
+        List<String> arr = new ArrayList<>();
+        String query = "SELECT team, AVG(Age) AS Средний_возраст FROM 'Indicators'   GROUP BY team  ORDER BY Средний_возраст DESC LIMIT 10";
+        PreparedStatement pr = conn.prepareStatement(query);
+        ResultSet rs = pr.executeQuery();
+        while (rs.next()) {
+            arr.add(rs.getString(1));
+        }
+        return arr;
+    }
+```
+Второй метод выполянет тот же запрос но возвращает из этого запроса 2 столбец с средним возрастом команд и записывает его в массив
+```
+ /*Метод выполянет запрос, который выводит имена всех команд и их посчитанный возраст
+    Из этого метода извлекается только столбец со средним возрастом, чтобы потом поместить его в Ось Y */
+    public static List<Double> AvgHeight(Connection conn) throws java.sql.SQLException {
+        List<Double> arr = new ArrayList<>();
+        String query = "SELECT team, AVG(Age) AS Средний_возраст FROM 'Indicators'   GROUP BY team  ORDER BY Средний_возраст DESC LIMIT 10";
+        PreparedStatement pr = conn.prepareStatement(query);
+        ResultSet rs  = pr.executeQuery();
+        while(rs.next()){
+            arr.add(rs.getDouble(2));
+        }
+        return arr;
+    }
+```
+
+Для построения графика я создал отдельный класс Chart
+*Код этого класса можно посмотреть в файле Chart.java*
+Перед началом построения графика подключим две библиотеки для работы с графиками - Jfreechart, jcommon
+Далее пишем в классе пишем структуру графика
+```
+public Chart(String WindowTitle , List<String> comand1, List<Double> avgHeight) {
+        super(WindowTitle);
+        JFreeChart Chart = ChartFactory.createBarChart(
+                "Средний возраст команд", // Название графика
+                "Команда", // Название Оси Х
+                "Средний возраст, лет", // Название Оси У
+                createDataset(comand1, avgHeight), // Создание набора данных
+                PlotOrientation.VERTICAL, // Отоброжение графика по вертикали
+                false, true, false);
+        CategoryPlot plot = (CategoryPlot) Chart.getPlot();
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+        renderer.setSeriesPaint(0, Color.ORANGE); // Изменил цвет столбцов
+
+
+        ChartPanel chartPanel = new ChartPanel(Chart);
+        chartPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        chartPanel.setBackground(Color.black); // Изменил фон
+        //chartPanel.setPreferredSize(new java.awt.Dimension( 560 , 367 ) );
+        setContentPane(chartPanel);
+    }
+```
+Также создаем метод который передает данные для графика ( те самые методы с названием команд и средним возрастом )
+```
+private CategoryDataset createDataset(List<String> comand, List<Double> avg) {
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        dataset.addValue(avg.get(0),"средний возраст", comand.get(0));
+        dataset.addValue(avg.get(1),"средний возраст", comand.get(1));
+        dataset.addValue(avg.get(2),"средний возраст", comand.get(2));
+        dataset.addValue(avg.get(3),"средний возраст", comand.get(3));
+        dataset.addValue(avg.get(4),"средний возраст", comand.get(4));
+        dataset.addValue(avg.get(5),"средний возраст", comand.get(5));
+        dataset.addValue(avg.get(6),"средний возраст", comand.get(6));
+        dataset.addValue(avg.get(7),"средний возраст", comand.get(7));
+        dataset.addValue(avg.get(8),"средний возраст", comand.get(8));
+        dataset.addValue(avg.get(9),"средний возраст", comand.get(9));
+        return dataset;
+    }
+```
+После создания структуры, в классе Main вызываем приложения для графика и его пармаетры
+```
+                List<Double> avgHeight = SQL.AvgHeight(connection); // Ось У
+                List<String> comands = SQL.ComandAvgHeight(connection); // Ось Х
+                Chart chart = new Chart("График",  comands, avgHeight); // Создание окна графика
+                chart.pack( );
+                chart.setSize(800,600);
+                chart.setVisible( true );
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
