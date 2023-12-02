@@ -232,7 +232,10 @@ private CategoryDataset createDataset(List<String> comand, List<Double> avg) {
 Выполняем запрос к таблице исходя из условий:
 ![Задание 3](https://github.com/korm445/java-project/assets/152654984/57be10f9-816f-49fb-9cf0-196b50f7c04b)
 
-Пишем метод в классе SQL, который обрабатывает этот запрос
+Если ограничить лимит строк до 1, то на первом месте будет команда "NYY"
+
+
+Пишем метод в классе SQL, который обрабатывает этот запрос.
 ```
 public static ResultSet mostOlderPlayer(Connection conn) throws java.sql.SQLException {
         List<ResultSet> arr = new ArrayList<>();
@@ -242,7 +245,7 @@ public static ResultSet mostOlderPlayer(Connection conn) throws java.sql.SQLExce
         return  rs;
     }
 ```
-В классе Main пишем красивый вывод этого метода
+В классе Main пишем красивый вывод этого метода, предварительно проверив условия для роста и веса
 ![image](https://github.com/korm445/java-project/assets/152654984/8e94646d-6283-4d6a-a683-6737728c8630)
 
 
