@@ -186,10 +186,29 @@ private CategoryDataset createDataset(List<String> comand, List<Double> avg) {
 Второй запрос выводит 5 самых высоких игроков этой команды
 ![Задание 2 2](https://github.com/korm445/java-project/assets/152654984/a7ad0fe7-82e6-4ddc-a54c-06944357f754)
 
+В классе SQl пишем два метода которые обрабатывают эти запросы, в классе Main, пишем красивый вывод этих методов в консоль
+![image](https://github.com/korm445/java-project/assets/152654984/1de923bf-7410-4478-95d8-8c0770949d46)
 
 
 ### *Задание 3*
-#### Найдите команду, с средним ростом равным от 74 до 78 inches и средним весом от 190 до 210 lbs, с самым высоким средним возрастом.  
+#### Найдите команду, с средним ростом равным от 74 до 78 inches и средним весом от 190 до 210 lbs, с самым высоким средним возрастом.
+Выполняем запрос к таблице исходя из условий:
+![Задание 3](https://github.com/korm445/java-project/assets/152654984/57be10f9-816f-49fb-9cf0-196b50f7c04b)
+
+Пишем метод в классе SQL, который обрабатывает этот запрос
+```
+public static ResultSet mostOlderPlayer(Connection conn) throws java.sql.SQLException {
+        List<ResultSet> arr = new ArrayList<>();
+        String query = "SELECT team, AVG(Height) AS Средний_рост, AVG(Weight) AS Средний_вес, AVG(Age) AS Средний_возраст FROM 'Indicators'   GROUP BY team  ORDER BY Средний_возраст DESC LIMIT 1";
+        PreparedStatement pr = conn.prepareStatement(query);
+        ResultSet rs  = pr.executeQuery();
+        return  rs;
+    }
+```
+В классе Main пишем красивый вывод этого метода
+![image](https://github.com/korm445/java-project/assets/152654984/8e94646d-6283-4d6a-a683-6737728c8630)
+
+
 
 
 
