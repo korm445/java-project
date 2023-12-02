@@ -35,7 +35,7 @@ public class Main {
                 System.out.println("Соединение установленно.");
                 SQL.connection(connection);
                 SQL.CreateTable();
-                //SQL.WriteTable(comands, connection);
+                SQL.WriteTable(comands, connection);
                 System.out.println();
 
                 //1 задание
